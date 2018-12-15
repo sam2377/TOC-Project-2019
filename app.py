@@ -3,36 +3,90 @@ from bottle import route, run, request, abort, static_file
 from fsm import TocMachine
 
 
-VERIFY_TOKEN = "Your Webhook Verify Token"
+VERIFY_TOKEN = "123"
 machine = TocMachine(
     states=[
-        'user',
-        'state1',
-        'state2'
+        'init',
+        'state_today',
+        'state_hint',
+        'state_detail',
+        'state_tomorrow',
+        'state_week',
+        'state_month'
     ],
     transitions=[
         {
             'trigger': 'advance',
-            'source': 'user',
-            'dest': 'state1',
-            'conditions': 'is_going_to_state1'
+            'source': 'init',
+            'dest': 'state_today',
+            'conditions': 'is_going_to_today'
         },
         {
             'trigger': 'advance',
-            'source': 'user',
-            'dest': 'state2',
-            'conditions': 'is_going_to_state2'
+            'source': 'init',
+            'dest': 'state_tomorrow',
+            'conditions': 'is_going_to_tomorrow'
+        },
+        {
+            'trigger': 'advance',
+            'source': 'init',
+            'dest': 'state_week',
+            'conditions': 'is_going_to_week'
+        },
+        {
+            'trigger': 'advance',
+            'source': 'init',
+            'dest': 'state_month',
+            'conditions': 'is_going_to_month'
+        },
+        {
+            'trigger': 'advance',
+            'source': 'state_today',
+            'dest': 'state_hint',
+            'conditions': 'is_going_to_hint'
+        },
+        {
+            'trigger': 'advance',
+            'source': 'state_today',
+            'dest': 'state_detail',
+            'conditions': 'is_going_to_detail'
+        },
+        {
+            'trigger': 'advance',
+            'source': 'state_hint',
+            'dest': 'state_detail',
+            'conditions': 'is_going_to_detail'
+        },
+        {
+            'trigger': 'advance',
+            'source': 'state_detail',
+            'dest': 'state_hint',
+            'conditions': 'is_going_to_hint'
+        },
+        {
+            'trigger': 'advance',
+            'source': [
+                'state_today',
+                'state_hint',
+                'state_detail'
+            ],
+            'dest': 'init',
+            'conditions': 'is_going_to_init'
         },
         {
             'trigger': 'go_back',
             'source': [
-                'state1',
-                'state2'
+                'state_today',
+                'state_hint',
+                'state_detail',
+                'state_tomorrow',
+                'state_week',
+                'state_month'
             ],
-            'dest': 'user'
+            'dest': 'init'
         }
     ],
-    initial='user',
+    initial='init',
     auto_transitions=False,
     show_conditions=True,
 )
