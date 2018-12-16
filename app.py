@@ -76,9 +76,6 @@ machine = TocMachine(
         {
             'trigger': 'go_back',
             'source': [
-                'state_today',
-                'state_hint',
-                'state_detail',
                 'state_tomorrow',
                 'state_week',
                 'state_month'
