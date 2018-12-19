@@ -67,7 +67,7 @@ python3 app.py
 	* 回覆該星座今日短評。
 	* Input: '[-hint|-detail|-exit]'
 		* -hint: 進入state_hint。
-		* -datail: 進入state_detail。
+		* -detail: 進入state_detail。
 		* -exit: 回到init。
 * state_hint
 	* 回覆該星座今日幸運物。
